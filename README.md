@@ -1,129 +1,222 @@
-🎬 Movie Recommendation System
+# 🎬 Intelligent Movie Recommendation System
 
-A machine learning-based movie recommendation system that suggests movies to users based on similarity and past ratings.
+A complete Data Science project that combines exploratory data analysis,
+content-based movie recommendation, TF-IDF feature engineering, cosine
+similarity, offline proxy evaluation, and an interactive Streamlit dashboard.
 
----
+## Project Objective
 
-📌 Overview
+Build a movie analytics and recommendation application that:
 
-This project builds a recommendation engine using collaborative filtering techniques. It analyzes user preferences and movie features to generate personalized recommendations.
+1. Cleans and explores movie metadata.
+2. Performs exploratory data analysis.
+3. Converts movie text/metadata into TF-IDF vectors.
+4. Finds similar movies using cosine distance.
+5. Generates Top-N movie recommendations.
+6. Provides a transparent offline genre-overlap evaluation.
+7. Presents the results through Streamlit.
 
-Recommendation systems are widely used in platforms like Netflix and Amazon to improve user experience and engagement.
+## Dataset
 
----
+The project uses `data/movies_metadata.csv`.
 
-🚀 Features
+The supplied dataset contains movie metadata such as:
 
-* Recommend movies based on user preferences
-* Uses similarity techniques (user-user / item-item)
-* Predicts ratings for unseen movies
-* Data preprocessing and visualization included
-* Evaluation using error metrics
+- title
+- overview
+- genres
+- tagline
+- release date
+- budget
+- revenue
+- popularity
+- runtime
+- vote average
+- vote count
+- original language
 
----
+The recommendation model only uses columns that are actually present in this dataset.
 
-🧠 Technologies Used
+## Machine Learning Approach
 
-* Python
-* Pandas
-* NumPy
-* Scikit-learn
-* Jupyter Notebook
+### 1. Feature Engineering
 
----
+The following available text fields are combined:
 
-## 📂 Dataset
+- title
+- overview
+- tagline
+- original title
+- genres
+- original language
 
-This project uses the MovieLens dataset.
+### 2. TF-IDF
 
-* Contains user ratings and movie metadata
-* Includes thousands of movies and users
-* Used for training and evaluation
+TF-IDF converts the combined movie text into numerical vectors.
 
----
+### 3. Cosine Similarity
 
-## ⚙️ How It Works
+Cosine distance is used by `NearestNeighbors`; similarity is calculated as:
 
-1. Load and preprocess movie and rating data
-2. Create user-item matrix
-3. Compute similarity (cosine similarity)
-4. Generate recommendations
-5. Evaluate model performance
+`similarity = 1 - cosine_distance`
 
-Collaborative filtering works by identifying patterns in user behavior and recommending items liked by similar users. ([GitHub][1])
+### 4. Recommendation
 
----
+For a selected movie, the system returns the Top-N most similar movies.
 
-## 📊 Results
+## Evaluation
 
-* Successfully generated movie recommendations
-* Model performance evaluated using RMSE / MAPE
-* Similarity-based recommendations tested
+Because this dataset does not provide user-level preference histories in the
+current project files, standard collaborative-filtering RMSE cannot be honestly
+computed from these files.
 
-(Add screenshots or output images here)
+Instead, the project includes a transparent proxy:
 
----
+**Genre Precision@K**
 
-## ▶️ How to Run
+A recommendation is considered relevant when it shares at least one genre with
+the query movie.
 
-1. Clone the repository:
+This should be described in the presentation as an **offline proxy evaluation**,
+not as user-level recommendation accuracy.
 
-```bash
-git clone https://github.com/munniramsaraswat33/Movie_Recommandation_System.git
+## Folder Structure
+
+```text
+Movie_Recommendation_Data_Science_Project/
+│
+├── app.py
+├── train_model.py
+├── evaluate_model.py
+├── requirements.txt
+├── README.md
+├── .gitignore
+│
+├── data/
+│   └── movies_metadata.csv
+│
+├── models/
+│   └── movie_recommender.joblib   # generated after training
+│
+└── src/
+    ├── __init__.py
+    ├── data_processing.py
+    ├── recommender.py
+    └── evaluation.py
 ```
 
-2. Install dependencies:
+## Setup
 
-```bash
+Use Python 3.12 for the smoothest compatibility with common Data Science
+libraries.
+
+### Windows PowerShell
+
+```powershell
+python -m venv .venv
+.venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-3. Run the notebook:
+### Train the model
 
-```bash
-jupyter notebook
+Run this once:
+
+```powershell
+python train_model.py
 ```
 
----
+This creates:
 
-## 📌 Project Structure
-
-```
-Movie_Recommandation_System/
-│── data/
-│── notebooks/
-│── model/
-│── README.md
+```text
+models/movie_recommender.joblib
 ```
 
----
+### Evaluate the model
 
-## ⚠️ Limitations
+```powershell
+python evaluate_model.py
+```
 
-* Cold start problem (new users/movies)
-* Limited scalability for large datasets
-* No real-time recommendation system
+### Start the Streamlit application
 
----
+```powershell
+streamlit run app.py
+```
 
-## 🔮 Future Improvements
+The application contains:
 
-* Add web interface (Streamlit / Flask)
-* Use deep learning models
-* Deploy as a web app
-* Improve recommendation accuracy
+- EDA Dashboard
+- Recommendation System
+- Offline Evaluation
+- Data Explorer
 
----
+## Important Project Claims
 
-## 📜 License
+This is a **content-based recommendation system**.
 
-This project is open-source and available under the MIT License.
+Do not describe it as collaborative filtering unless a separate user-rating
+dataset and collaborative-filtering model are added.
 
----
+Do not claim RMSE/MAPE results unless a rating-prediction model and appropriate
+ground-truth test data are implemented.
 
-## 👤 Author
+## Future Scope
+
+- Add a user-rating dataset for collaborative filtering.
+- Build a hybrid recommender combining content and user behavior.
+- Add movie posters using a legitimate movie API.
+- Add user accounts and personalized watch history.
+- Deploy the Streamlit application.
+- Add a larger-scale vector database for production search.
+
+## Author
 
 Munniram Saraswat
-Computer Science Engineering Student
 
-[1]: https://github.com/entbappy/Movie-Recommender-System-Using-Machine-Learning?utm_source=chatgpt.com "Movie-Recommender-System-Using-Machine-Learning"
+```text
+models/movie_recommender.joblib
+```
+
+### Evaluate the model
+
+```powershell
+python evaluate_model.py
+```
+
+### Start the Streamlit application
+
+```powershell
+streamlit run app.py
+```
+
+The application contains:
+
+- EDA Dashboard
+- Recommendation System
+- Offline Evaluation
+- Data Explorer
+
+## Important Project Claims
+
+This is a **content-based recommendation system**.
+
+Do not describe it as collaborative filtering unless a separate user-rating
+dataset and collaborative-filtering model are added.
+
+Do not claim RMSE/MAPE results unless a rating-prediction model and appropriate
+ground-truth test data are implemented.
+
+## Future Scope
+
+- Add a user-rating dataset for collaborative filtering.
+- Build a hybrid recommender combining content and user behavior.
+- Add movie posters using a legitimate movie API.
+- Add user accounts and personalized watch history.
+- Deploy the Streamlit application.
+- Add a larger-scale vector database for production search.
+
+## Author
+
+Munniram Saraswat
+>>>>>>> 438400d (Initiatl commit)
